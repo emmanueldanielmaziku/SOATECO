@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "246397019143",
+    "project_id": "soateco-app",
+    "storage_bucket": "soateco-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246397019143:android:2b8781246b9a44e1a3b6a2",
+        "android_client_info": {
+          "package_name": "com.example.soateco"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2NhXVmn1F04I3LTJJ4N0cs0qbuLix8ps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
