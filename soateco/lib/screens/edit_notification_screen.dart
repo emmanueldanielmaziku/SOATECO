@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
-class SendNotificationScreen extends StatefulWidget {
-  const SendNotificationScreen({Key? key}) : super(key: key);
+class EditNotificationScreen extends StatefulWidget {
+  final String notificationId;
+  final String title;
+  final String message;
+  final String targetGroup;
+
+  const EditNotificationScreen({
+    Key? key,
+    required this.notificationId,
+    required this.title,
+    required this.message,
+    required this.targetGroup,
+  }) : super(key: key);
 
   @override
-  State<SendNotificationScreen> createState() => _SendNotificationScreenState();
+  State<EditNotificationScreen> createState() => _EditNotificationScreenState();
 }
 
-class _SendNotificationScreenState extends State<SendNotificationScreen> {
+class _EditNotificationScreenState extends State<EditNotificationScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _messageController = TextEditingController();
-  String _selectedGroup = 'all';
+  late TextEditingController _titleController;
+  late TextEditingController _messageController;
+  late String _selectedGroup;
   bool _isLoading = false;
 
   final List<Map<String, String>> _groups = [
@@ -28,13 +37,21 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.title);
+    _messageController = TextEditingController(text: widget.message);
+    _selectedGroup = widget.targetGroup;
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     _messageController.dispose();
     super.dispose();
   }
 
-  Future<void> _sendNotification() async {
+  Future<void> _updateNotification() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() {
@@ -42,46 +59,30 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
     });
 
     try {
-      final authService = Provider.of<AuthService>(context, listen: false);
-      
-      // Save notification to Firestore
-      await FirebaseFirestore.instance.collection('notifications').add({
+      // Update notification in Firestore
+      await FirebaseFirestore.instance.collection('notifications').doc(widget.notificationId).update({
         'title': _titleController.text.trim(),
         'message': _messageController.text.trim(),
         'targetGroup': _selectedGroup,
-        'authorId': authService.user!.uid,
-        'authorEmail': authService.user!.email,
-        'createdAt': FieldValue.serverTimestamp(),
-        'read': [],
+        'updatedAt': FieldValue.serverTimestamp(),
       });
-
-      // In a real app, you would trigger FCM notifications here
-      // This would typically be done via a Cloud Function
 
       // Show success message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Announcement sent successfully!'),
+            content: Text('Announcement updated successfully!'),
             backgroundColor: AppTheme.successColor,
           ),
         );
         
-        // Clear form
-        _titleController.clear();
-        _messageController.clear();
-        setState(() {
-          _selectedGroup = 'all';
-        });
-        
-        // Navigate back
         Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error sending announcement: $e'),
+            content: Text('Error updating announcement: $e'),
             backgroundColor: AppTheme.errorColor,
           ),
         );
@@ -99,7 +100,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Send Announcements'),
+        title: const Text('Edit Announcement'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -110,14 +111,14 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Send Announcement',
+                  'Edit Announcement',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Send important announcements to specific groups',
+                  'Update your announcement information',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppTheme.textSecondaryColor,
                   ),
@@ -218,7 +219,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _sendNotification,
+                    onPressed: _isLoading ? null : _updateNotification,
                     child: _isLoading
                         ? const SizedBox(
                             height: 20,
@@ -228,7 +229,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text('Send Announcement'),
+                        : const Text('Update Announcement'),
                   ),
                 ),
               ],
