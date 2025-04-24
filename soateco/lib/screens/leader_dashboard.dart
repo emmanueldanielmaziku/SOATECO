@@ -1,9 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:soateco/screens/login_screen.dart';
 import '../services/auth_service.dart';
 import 'post_news_screen.dart';
 import 'send_notification_screen.dart';
@@ -13,9 +10,10 @@ import 'manage_posts_screen.dart';
 import 'manage_announcements_screen.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
+import 'leader_feedback_screen.dart';
 
 class LeaderDashboard extends StatefulWidget {
-  const LeaderDashboard({super.key});
+  const LeaderDashboard({Key? key}) : super(key: key);
 
   @override
   State<LeaderDashboard> createState() => _LeaderDashboardState();
@@ -41,18 +39,12 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-
+    
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(20),
-          child: _buildAppBar(authService),
-        ),
-      ),
       body: SafeArea(
         child: Column(
           children: [
+            _buildAppBar(authService),
             Expanded(
               child: PageView(
                 controller: _pageController,
@@ -86,10 +78,8 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: AppTheme.primaryColor,
           unselectedItemColor: AppTheme.textSecondaryColor,
-          selectedLabelStyle:
-              const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-          unselectedLabelStyle:
-              const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
           elevation: 0,
           items: const [
             BottomNavigationBarItem(
@@ -140,12 +130,16 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
               gradient: AppTheme.primaryGradient,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Center(
-                child: Image.network(
-              'https://www.atc.ac.tz/rjm/img/atc%20logo.png',
-              width: 28,
-              height: 28,
-            )),
+            child: const Center(
+              child: Text(
+                'ATC',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           Column(
@@ -154,8 +148,8 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
               Text(
                 'SOATECO',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 'Leader Dashboard',
@@ -168,9 +162,7 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
             icon: const Icon(Icons.logout_rounded),
             onPressed: () async {
               await authService.signOut();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
-              );
+              Navigator.of(context).pushReplacementNamed('/login');
             },
           ),
         ],
@@ -210,15 +202,15 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                       Text(
                         'Welcome back,',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.white.withOpacity(0.9),
-                            ),
+                          color: Colors.white.withOpacity(0.9),
+                        ),
                       ),
                       Text(
                         authService.user?.email ?? 'Leader',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
@@ -226,9 +218,9 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
               ],
             ),
           ),
-
+          
           const SizedBox(height: 24),
-
+          
           // Stats section
           Row(
             children: [
@@ -253,18 +245,18 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
               ),
             ],
           ),
-
+          
           const SizedBox(height: 24),
-
+          
           Text(
             'Quick Actions',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              fontWeight: FontWeight.bold,
+            ),
           ),
-
+          
           const SizedBox(height: 16),
-
+          
           // Dashboard grid
           GridView.count(
             shrinkWrap: true,
@@ -293,8 +285,7 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                 AppTheme.accentColor,
                 () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (_) => const SendNotificationScreen()),
+                  MaterialPageRoute(builder: (_) => const SendNotificationScreen()),
                 ),
               ),
               _buildActionCard(
@@ -305,8 +296,7 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                 Colors.orange[700]!,
                 () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (_) => const RegisterLeaderScreen()),
+                  MaterialPageRoute(builder: (_) => const RegisterLeaderScreen()),
                 ),
               ),
               _buildActionCard(
@@ -318,6 +308,17 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const VotingPollsScreen()),
+                ),
+              ),
+              _buildActionCard(
+                context,
+                'Student Feedback',
+                Icons.feedback_outlined,
+                'View and respond to student feedback and suggestions',
+                Colors.green[700]!,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LeaderFeedbackScreen()),
                 ),
               ),
             ],
@@ -354,16 +355,22 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                 ),
               ),
               const Spacer(),
-              countWidget,
+              Icon(
+                Icons.arrow_forward_ios,
+                color: AppTheme.textSecondaryColor,
+                size: 14,
+              ),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           Text(
             title,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppTheme.textSecondaryColor,
-                ),
+              color: AppTheme.textSecondaryColor,
+            ),
           ),
+          const SizedBox(height: 4),
+          countWidget,
         ],
       ),
     );
@@ -373,21 +380,19 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('news')
-          .where('authorId',
-              isEqualTo:
-                  Provider.of<AuthService>(context, listen: false).user?.uid)
+          .where('authorId', isEqualTo: Provider.of<AuthService>(context, listen: false).user?.uid)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('...');
         }
-
+        
         final count = snapshot.data?.docs.length ?? 0;
         return Text(
           count.toString(),
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            fontWeight: FontWeight.bold,
+          ),
         );
       },
     );
@@ -397,21 +402,19 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('notifications')
-          .where('authorId',
-              isEqualTo:
-                  Provider.of<AuthService>(context, listen: false).user?.uid)
+          .where('authorId', isEqualTo: Provider.of<AuthService>(context, listen: false).user?.uid)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('...');
         }
-
+        
         final count = snapshot.data?.docs.length ?? 0;
         return Text(
           count.toString(),
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            fontWeight: FontWeight.bold,
+          ),
         );
       },
     );
@@ -446,8 +449,8 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
           Text(
             title,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              fontWeight: FontWeight.bold,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
@@ -455,8 +458,8 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
             child: Text(
               description,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.textSecondaryColor,
-                  ),
+                color: AppTheme.textSecondaryColor,
+              ),
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
@@ -476,10 +479,11 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
           Text(
             'Profile',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 24),
+          
           CustomContainer.card(
             child: Column(
               children: [
@@ -496,28 +500,28 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                 Text(
                   authService.user?.email ?? 'Leader',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'Leader',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.textSecondaryColor,
-                      ),
+                    color: AppTheme.textSecondaryColor,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 16),
-                _buildProfileItem(Icons.email_outlined, 'Email',
-                    authService.user?.email ?? 'Not available'),
+                _buildProfileItem(Icons.email_outlined, 'Email', authService.user?.email ?? 'Not available'),
                 _buildProfileItem(Icons.badge_outlined, 'Role', 'Leader'),
-                _buildProfileItem(
-                    Icons.calendar_today_outlined, 'Joined', 'April 2023'),
+                _buildProfileItem(Icons.calendar_today_outlined, 'Joined', 'April 2023'),
               ],
             ),
           ),
+          
           const SizedBox(height: 24),
+          
           CustomContainer.outlined(
             borderColor: AppTheme.errorColor,
             child: Row(
@@ -528,7 +532,7 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                     color: AppTheme.errorColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.logout,
                     color: AppTheme.errorColor,
                     size: 20,
@@ -541,11 +545,10 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                     children: [
                       Text(
                         'Sign Out',
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppTheme.errorColor,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.errorColor,
+                        ),
                       ),
                       Text(
                         'Log out from your account',
@@ -555,16 +558,14 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_forward_ios,
                     color: AppTheme.errorColor,
                     size: 16,
                   ),
                   onPressed: () async {
                     await authService.signOut();
-                       Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    );
+                    Navigator.of(context).pushReplacementNamed('/login');
                   },
                 ),
               ],
@@ -599,14 +600,14 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
               Text(
                 title,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.textSecondaryColor,
-                    ),
+                  color: AppTheme.textSecondaryColor,
+                ),
               ),
               Text(
                 value,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),

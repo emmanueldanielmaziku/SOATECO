@@ -5,7 +5,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class StudentComingSoon extends StatelessWidget {
-  const StudentComingSoon({super.key});
+  const StudentComingSoon({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,6 @@ class StudentComingSoon extends StatelessWidget {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        // borderRadius: BorderRadius.circular(60),
                         child: const Icon(
                           Icons.construction,
                           size: 60,

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,12 +13,12 @@ class EditNewsScreen extends StatefulWidget {
   final String? imageUrl;
 
   const EditNewsScreen({
-    super.key,
+    Key? key,
     required this.postId,
     required this.title,
     required this.content,
     this.imageUrl,
-  });
+  }) : super(key: key);
 
   @override
   State<EditNewsScreen> createState() => _EditNewsScreenState();
@@ -77,9 +76,7 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
             final ref = FirebaseStorage.instance.refFromURL(widget.imageUrl!);
             await ref.delete();
           } catch (e) {
-            if (kDebugMode) {
-              print('Error deleting image: $e');
-            }
+            print('Error deleting image: $e');
           }
         }
         imageUrl = null;

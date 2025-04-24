@@ -1,15 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:soateco/screens/student_dashboard.dart';
 import '../services/auth_service.dart';
 import 'leader_dashboard.dart';
-import 'student_coming_soon.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -74,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       );
     } else {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const StudentComingSoon()),
+        MaterialPageRoute(builder: (_) => const StudentDashboard()),
       );
     }
   }
@@ -112,15 +110,17 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                         ],
                       ),
-                      child: Center(
-                        child: Image.network(
-                          'https://www.atc.ac.tz/rjm/img/atc%20logo.png',
-                          fit: BoxFit.cover,
-                          width: 80,
-                          height: 80,
+                      child: const Center(
+                        child: Text(
+                          'ATC',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
                   ),
                   const SizedBox(height: 32),
                   Text(

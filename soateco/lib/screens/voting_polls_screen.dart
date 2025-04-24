@@ -88,6 +88,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
         'createdBy': authService.user!.uid,
         'createdAt': FieldValue.serverTimestamp(),
         'active': true,
+        'userVotes': {}, // Initialize empty userVotes map
       });
 
       // Show success message

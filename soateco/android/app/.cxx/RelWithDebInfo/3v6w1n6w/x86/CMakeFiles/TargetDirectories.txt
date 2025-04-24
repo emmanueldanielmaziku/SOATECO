@@ -1,0 +1,2 @@
+/media/lawton/EEE400BEE4008AD3/SOATECO/soateco/android/app/.cxx/RelWithDebInfo/3v6w1n6w/x86/CMakeFiles/edit_cache.dir
+/media/lawton/EEE400BEE4008AD3/SOATECO/soateco/android/app/.cxx/RelWithDebInfo/3v6w1n6w/x86/CMakeFiles/rebuild_cache.dir
