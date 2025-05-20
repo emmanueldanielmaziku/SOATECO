@@ -9,7 +9,7 @@ import 'student_polls_screen.dart';
 import 'student_profile_screen.dart';
 
 class StudentDashboard extends StatefulWidget {
-  const StudentDashboard({Key? key}) : super(key: key);
+  const StudentDashboard({super.key});
 
   @override
   State<StudentDashboard> createState() => _StudentDashboardState();
@@ -119,21 +119,17 @@ class _StudentDashboardState extends State<StudentDashboard> {
       ),
       child: Row(
         children: [
-          Container(
+           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(
-              gradient: AppTheme.primaryGradient,
-              borderRadius: BorderRadius.circular(12),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
             ),
-            child: const Center(
-              child: Text(
-                'ATC',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+            child: Center(
+              child: Image.asset(
+                'lib/assets/icons/logo.png',
+                fit: BoxFit.cover,
               ),
             ),
           ),

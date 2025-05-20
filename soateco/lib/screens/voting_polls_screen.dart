@@ -5,7 +5,7 @@ import '../services/auth_service.dart';
 import 'package:intl/intl.dart';
 
 class VotingPollsScreen extends StatefulWidget {
-  const VotingPollsScreen({Key? key}) : super(key: key);
+  const VotingPollsScreen({super.key});
 
   @override
   State<VotingPollsScreen> createState() => _VotingPollsScreenState();
@@ -294,7 +294,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                       ],
                                     ),
                                   );
-                                }).toList(),
+                                }),
                                 
                                 const SizedBox(height: 8),
                                 Row(

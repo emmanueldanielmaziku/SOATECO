@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soateco/screens/student_dashboard.dart';
@@ -7,7 +9,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -49,31 +51,37 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
-  Future<void> _login() async {
+Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
     final authService = Provider.of<AuthService>(context, listen: false);
-    
-    final error = await authService.signInWithAdmissionNumberAndPassword(
+
+    // Call the sign-in method and get the role
+    final role = await authService.signInWithAdmissionNumberAndPassword(
       _admissionNumberController.text.trim(),
       _passwordController.text,
     );
 
-    if (error != null) {
+    if (role == null) {
       setState(() {
-        _errorMessage = error;
+        _errorMessage = 'Login failed. Please try again.';
       });
       return;
     }
 
-    if (authService.isLeader) {
+    if (role == 'leader') {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const LeaderDashboard()),
       );
-    } else {
+    } else if (role == 'student') {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const StudentDashboard()),
       );
+    } else {
+      setState(() {
+        _errorMessage = 'Unknown user role. Please contact support.';
+        print('Unknown user role: $role');
+      });
     }
   }
 
@@ -99,25 +107,22 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     child: Container(
                       width: 100,
                       height: 100,
-                      decoration: BoxDecoration(
-                        gradient: AppTheme.primaryGradient,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primaryColor.withOpacity(0.3),
+                
+                            color: Colors.white,
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
                         ],
                       ),
-                      child: const Center(
-                        child: Text(
-                          'ATC',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      child: Center(
+                        child: Image.asset(
+                          'lib/assets/icons/logo.png',
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),

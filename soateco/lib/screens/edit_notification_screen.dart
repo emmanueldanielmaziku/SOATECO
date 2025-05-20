@@ -10,12 +10,12 @@ class EditNotificationScreen extends StatefulWidget {
   final String targetGroup;
 
   const EditNotificationScreen({
-    Key? key,
+    super.key,
     required this.notificationId,
     required this.title,
     required this.message,
     required this.targetGroup,
-  }) : super(key: key);
+  });
 
   @override
   State<EditNotificationScreen> createState() => _EditNotificationScreenState();

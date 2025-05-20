@@ -17,7 +17,7 @@ class PollDetailScreen extends StatefulWidget {
   final String? userVote;
 
   const PollDetailScreen({
-    Key? key,
+    super.key,
     required this.pollId,
     required this.title,
     required this.options,
@@ -26,7 +26,7 @@ class PollDetailScreen extends StatefulWidget {
     required this.active,
     required this.hasVoted,
     this.userVote,
-  }) : super(key: key);
+  });
 
   @override
   State<PollDetailScreen> createState() => _PollDetailScreenState();
@@ -324,7 +324,7 @@ class _PollDetailScreenState extends State<PollDetailScreen> {
                           ),
                         ),
                       );
-                    }).toList(),
+                    }),
                     
                     const SizedBox(height: 24),
                     
@@ -448,7 +448,7 @@ class _PollDetailScreenState extends State<PollDetailScreen> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.share,color: Colors.transparent,),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

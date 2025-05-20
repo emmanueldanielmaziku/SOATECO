@@ -9,7 +9,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class PostNewsScreen extends StatefulWidget {
-  const PostNewsScreen({Key? key}) : super(key: key);
+  const PostNewsScreen({super.key});
 
   @override
   State<PostNewsScreen> createState() => _PostNewsScreenState();
@@ -19,7 +19,7 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
-  
+
   File? _selectedImage;
   bool _isLoading = false;
   final ImagePicker _picker = ImagePicker();
@@ -57,7 +57,7 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
             .ref()
             .child('news_images')
             .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
-        
+
         await storageRef.putFile(_selectedImage!);
         imageUrl = await storageRef.getDownloadURL();
       }
@@ -80,14 +80,14 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
             backgroundColor: AppTheme.successColor,
           ),
         );
-        
+
         // Clear form
         _titleController.clear();
         _contentController.clear();
         setState(() {
           _selectedImage = null;
         });
-        
+
         // Navigate back
         Navigator.pop(context);
       }
@@ -126,18 +126,18 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                 Text(
                   'Create News Post',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Share important information with the college community',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondaryColor,
-                  ),
+                        color: AppTheme.textSecondaryColor,
+                      ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 CustomContainer.card(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,8 +146,8 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                       Text(
                         'Title',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -163,13 +163,13 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Content field
                       Text(
                         'Content',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -189,9 +189,9 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Image picker
                 CustomContainer.card(
                   child: Column(
@@ -199,9 +199,10 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                     children: [
                       Text(
                         'Add Image (Optional)',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                       ),
                       const SizedBox(height: 16),
                       GestureDetector(
@@ -210,7 +211,9 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                           height: 200,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: _selectedImage == null ? Colors.grey[100] : null,
+                            color: _selectedImage == null
+                                ? Colors.grey[100]
+                                : null,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Colors.grey[300]!),
                           ),
@@ -248,8 +251,9 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                                 _selectedImage = null;
                               });
                             },
-                            icon: Icon(Icons.delete_outline, color: AppTheme.errorColor),
-                            label: Text(
+                            icon: const Icon(Icons.delete_outline,
+                                color: AppTheme.errorColor),
+                            label: const Text(
                               'Remove Image',
                               style: TextStyle(color: AppTheme.errorColor),
                             ),
@@ -259,9 +263,9 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Submit button
                 SizedBox(
                   width: double.infinity,

@@ -86,10 +86,9 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColor: primaryColor,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: primaryColor,
       secondary: accentColor,
-      background: backgroundColor,
       error: errorColor,
       surface: cardColor,
     ),

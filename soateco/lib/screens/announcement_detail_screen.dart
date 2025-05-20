@@ -12,14 +12,14 @@ class AnnouncementDetailScreen extends StatelessWidget {
   final DateTime createdAt;
 
   const AnnouncementDetailScreen({
-    Key? key,
+    super.key,
     required this.announcementId,
     required this.title,
     required this.message,
     required this.targetGroup,
     required this.authorEmail,
     required this.createdAt,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

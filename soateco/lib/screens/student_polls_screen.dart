@@ -8,7 +8,7 @@ import '../widgets/custom_container.dart';
 import 'poll_detail_screen.dart';
 
 class StudentPollsScreen extends StatelessWidget {
-  const StudentPollsScreen({Key? key}) : super(key: key);
+  const StudentPollsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +32,24 @@ class StudentPollsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    height: 50,
+                    margin: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    height: 55,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.grey[500]!,
+                        width: 1,
+                      ),
                     ),
                     child: TabBar(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
                       indicator: BoxDecoration(
                         color: Colors.purple[700],
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      dividerColor: Colors.transparent,
                       labelColor: Colors.white,
                       unselectedLabelColor: AppTheme.textSecondaryColor,
                       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
@@ -284,7 +291,7 @@ class StudentPollsScreen extends StatelessWidget {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                   
                   if (options.length > 2)
                     Text(

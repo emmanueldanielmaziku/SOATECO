@@ -6,7 +6,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class SendNotificationScreen extends StatefulWidget {
-  const SendNotificationScreen({Key? key}) : super(key: key);
+  const SendNotificationScreen({super.key});
 
   @override
   State<SendNotificationScreen> createState() => _SendNotificationScreenState();

@@ -12,14 +12,14 @@ class NewsDetailScreen extends StatelessWidget {
   final DateTime createdAt;
 
   const NewsDetailScreen({
-    Key? key,
+    super.key,
     required this.newsId,
     required this.title,
     required this.content,
     this.imageUrl,
     required this.authorEmail,
     required this.createdAt,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

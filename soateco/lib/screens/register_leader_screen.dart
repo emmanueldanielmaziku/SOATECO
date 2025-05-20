@@ -5,7 +5,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class RegisterLeaderScreen extends StatefulWidget {
-  const RegisterLeaderScreen({Key? key}) : super(key: key);
+  const RegisterLeaderScreen({super.key});
 
   @override
   State<RegisterLeaderScreen> createState() => _RegisterLeaderScreenState();

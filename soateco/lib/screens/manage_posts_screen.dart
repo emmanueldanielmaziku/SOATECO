@@ -9,7 +9,7 @@ import 'post_news_screen.dart';
 import 'edit_news_screen.dart';
 
 class ManagePostsScreen extends StatelessWidget {
-  const ManagePostsScreen({Key? key}) : super(key: key);
+  const ManagePostsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

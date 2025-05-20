@@ -15,7 +15,7 @@ class CustomContainer extends StatelessWidget {
   final VoidCallback? onTap;
 
   const CustomContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.padding,
     this.margin,
@@ -27,7 +27,7 @@ class CustomContainer extends StatelessWidget {
     this.boxShadow,
     this.gradient,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,6 @@ class CustomContainer extends StatelessWidget {
     VoidCallback? onTap,
   }) {
     return CustomContainer(
-      child: child,
       padding: padding ?? const EdgeInsets.all(16),
       margin: margin ?? const EdgeInsets.only(bottom: 16),
       width: width,
@@ -74,6 +73,7 @@ class CustomContainer extends StatelessWidget {
       backgroundColor: AppTheme.cardColor,
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
+      child: child,
     );
   }
 
@@ -87,7 +87,6 @@ class CustomContainer extends StatelessWidget {
     VoidCallback? onTap,
   }) {
     return CustomContainer(
-      child: child,
       padding: padding ?? const EdgeInsets.all(16),
       margin: margin ?? const EdgeInsets.only(bottom: 16),
       width: width,
@@ -95,6 +94,7 @@ class CustomContainer extends StatelessWidget {
       gradient: gradient ?? AppTheme.primaryGradient,
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
+      child: child,
     );
   }
 
@@ -108,7 +108,6 @@ class CustomContainer extends StatelessWidget {
     VoidCallback? onTap,
   }) {
     return CustomContainer(
-      child: child,
       padding: padding ?? const EdgeInsets.all(16),
       margin: margin ?? const EdgeInsets.only(bottom: 16),
       width: width,
@@ -117,6 +116,7 @@ class CustomContainer extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: borderColor, width: 1.5),
       onTap: onTap,
+      child: child,
     );
   }
 }

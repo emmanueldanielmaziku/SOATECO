@@ -6,7 +6,7 @@ import '../widgets/custom_container.dart';
 import 'announcement_detail_screen.dart';
 
 class StudentAnnouncementsScreen extends StatelessWidget {
-  const StudentAnnouncementsScreen({Key? key}) : super(key: key);
+  const StudentAnnouncementsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

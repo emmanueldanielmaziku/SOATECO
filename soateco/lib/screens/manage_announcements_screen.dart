@@ -9,7 +9,7 @@ import 'send_notification_screen.dart';
 import 'edit_notification_screen.dart';
 
 class ManageAnnouncementsScreen extends StatelessWidget {
-  const ManageAnnouncementsScreen({Key? key}) : super(key: key);
+  const ManageAnnouncementsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class ManageAnnouncementsScreen extends StatelessWidget {
                     );
                   },
                   icon: const Icon(Icons.add, size: 18),
-                  label: const Text('New Announcement'),
+                  label: const Text('Create New'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),

@@ -5,7 +5,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class LeaderFeedbackScreen extends StatelessWidget {
-  const LeaderFeedbackScreen({Key? key}) : super(key: key);
+  const LeaderFeedbackScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class LeaderFeedbackScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'No ${status} feedback available',
+                  'No $status feedback available',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 16,
@@ -286,7 +286,7 @@ class LeaderFeedbackScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.calendar_today,
                         size: 16,
                         color: AppTheme.textSecondaryColor,

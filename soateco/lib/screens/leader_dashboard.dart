@@ -1,6 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:soateco/screens/login_screen.dart';
 import '../services/auth_service.dart';
 import 'post_news_screen.dart';
 import 'send_notification_screen.dart';
@@ -13,7 +16,7 @@ import '../widgets/custom_container.dart';
 import 'leader_feedback_screen.dart';
 
 class LeaderDashboard extends StatefulWidget {
-  const LeaderDashboard({Key? key}) : super(key: key);
+  const LeaderDashboard({super.key});
 
   @override
   State<LeaderDashboard> createState() => _LeaderDashboardState();
@@ -126,18 +129,14 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(
-              gradient: AppTheme.primaryGradient,
-              borderRadius: BorderRadius.circular(12),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
             ),
-            child: const Center(
-              child: Text(
-                'ATC',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+            child: Center(
+              child: Image.asset(
+                'lib/assets/icons/logo.png',
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -162,7 +161,12 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
             icon: const Icon(Icons.logout_rounded),
             onPressed: () async {
               await authService.signOut();
-              Navigator.of(context).pushReplacementNamed('/login');
+                      Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+                (route) => false,
+              );
             },
           ),
         ],
@@ -355,7 +359,7 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                 ),
               ),
               const Spacer(),
-              Icon(
+              const Icon(
                 Icons.arrow_forward_ios,
                 color: AppTheme.textSecondaryColor,
                 size: 14,
@@ -532,7 +536,7 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                     color: AppTheme.errorColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.logout,
                     color: AppTheme.errorColor,
                     size: 20,
@@ -558,14 +562,19 @@ class _LeaderDashboardState extends State<LeaderDashboard> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_forward_ios,
                     color: AppTheme.errorColor,
                     size: 16,
                   ),
                   onPressed: () async {
                     await authService.signOut();
-                    Navigator.of(context).pushReplacementNamed('/login');
+                            Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                      (route) => false,
+                    );
                   },
                 ),
               ],

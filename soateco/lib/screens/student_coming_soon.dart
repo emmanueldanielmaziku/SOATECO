@@ -5,7 +5,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class StudentComingSoon extends StatelessWidget {
-  const StudentComingSoon({Key? key}) : super(key: key);
+  const StudentComingSoon({super.key});
 
   @override
   Widget build(BuildContext context) {

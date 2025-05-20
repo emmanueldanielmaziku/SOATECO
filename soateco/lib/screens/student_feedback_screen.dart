@@ -6,7 +6,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
 
 class StudentFeedbackScreen extends StatefulWidget {
-  const StudentFeedbackScreen({Key? key}) : super(key: key);
+  const StudentFeedbackScreen({super.key});
 
   @override
   State<StudentFeedbackScreen> createState() => _StudentFeedbackScreenState();

@@ -13,12 +13,12 @@ class EditNewsScreen extends StatefulWidget {
   final String? imageUrl;
 
   const EditNewsScreen({
-    Key? key,
+    super.key,
     required this.postId,
     required this.title,
     required this.content,
     this.imageUrl,
-  }) : super(key: key);
+  });
 
   @override
   State<EditNewsScreen> createState() => _EditNewsScreenState();
