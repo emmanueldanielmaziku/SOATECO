@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Colors
+
   static const Color primaryColor = Color(0xFF0D8E53);
   static const Color primaryDarkColor = Color(0xFF076E3F);
   static const Color primaryLightColor = Color(0xFF4CAF7D);
@@ -186,7 +187,7 @@ class AppTheme {
       thickness: 1,
       space: 1,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(

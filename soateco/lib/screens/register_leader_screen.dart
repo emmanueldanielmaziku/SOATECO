@@ -19,7 +19,7 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
   final _admissionNumberController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  
+
   String? _errorMessage;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -50,13 +50,12 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
     });
 
     final authService = Provider.of<AuthService>(context, listen: false);
-    
+
     final error = await authService.registerLeader(
-      _emailController.text.trim(),
-      _passwordController.text,
-      _nameController.text.trim(),
-      _phoneController.text.trim(),
-      _admissionNumberController.text.trim(),
+      fullName: _nameController.text.trim(),
+      admissionNumber: _admissionNumberController.text.trim(),
+      password: _passwordController.text,
+      phone: _phoneController.text.trim(),
     );
 
     if (error != null) {
@@ -73,7 +72,7 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
           backgroundColor: AppTheme.successColor,
         ),
       );
-      
+
       // Clear form
       _nameController.clear();
       _emailController.clear();
@@ -81,7 +80,7 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
       _admissionNumberController.clear();
       _passwordController.clear();
       _confirmPasswordController.clear();
-      
+
       // Navigate back
       Navigator.pop(context);
     }
@@ -90,7 +89,7 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register Leader'),
@@ -106,18 +105,18 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                 Text(
                   'Register New Leader',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Add a new leader to the system',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondaryColor,
-                  ),
+                        color: AppTheme.textSecondaryColor,
+                      ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Error message
                 if (_errorMessage != null)
                   CustomContainer(
@@ -127,7 +126,8 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                     border: Border.all(color: Colors.red[300]!),
                     child: Row(
                       children: [
-                        Icon(Icons.error_outline, color: Colors.red[700], size: 24),
+                        Icon(Icons.error_outline,
+                            color: Colors.red[700], size: 24),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
@@ -139,7 +139,7 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                     ),
                   ),
                 if (_errorMessage != null) const SizedBox(height: 24),
-                
+
                 CustomContainer.card(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,8 +148,8 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                       Text(
                         'Full Name',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -157,6 +157,18 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         decoration: const InputDecoration(
                           hintText: 'Enter full name',
                           prefixIcon: Icon(Icons.person_outline),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide:
+                                BorderSide(color: Color(0xFF43A047), width: 2),
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -166,13 +178,13 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Email field
                       Text(
                         'Email',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -181,6 +193,18 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         decoration: const InputDecoration(
                           hintText: 'Enter email address',
                           prefixIcon: Icon(Icons.email_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide:
+                                BorderSide(color: Color(0xFF43A047), width: 2),
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -193,13 +217,13 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Phone field
                       Text(
                         'Phone Number',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -208,6 +232,18 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         decoration: const InputDecoration(
                           hintText: 'Enter phone number',
                           prefixIcon: Icon(Icons.phone_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide:
+                                BorderSide(color: Color(0xFF43A047), width: 2),
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -217,13 +253,13 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Admission Number field
                       Text(
                         'Admission Number',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -231,6 +267,18 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         decoration: const InputDecoration(
                           hintText: 'Enter admission number',
                           prefixIcon: Icon(Icons.badge_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide:
+                                BorderSide(color: Color(0xFF43A047), width: 2),
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -242,9 +290,9 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 CustomContainer.card(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,8 +301,8 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                       Text(
                         'Password',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -265,7 +313,9 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                           prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                               color: AppTheme.textSecondaryColor,
                             ),
                             onPressed: () {
@@ -273,6 +323,18 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                                 _obscurePassword = !_obscurePassword;
                               });
                             },
+                          ),
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide:
+                                BorderSide(color: Color(0xFF43A047), width: 2),
                           ),
                         ),
                         validator: (value) {
@@ -286,13 +348,13 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Confirm password field
                       Text(
                         'Confirm Password',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -303,12 +365,15 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                           prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                              _obscureConfirmPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                               color: AppTheme.textSecondaryColor,
                             ),
                             onPressed: () {
                               setState(() {
-                                _obscureConfirmPassword = !_obscureConfirmPassword;
+                                _obscureConfirmPassword =
+                                    !_obscureConfirmPassword;
                               });
                             },
                           ),
@@ -323,9 +388,9 @@ class _RegisterLeaderScreenState extends State<RegisterLeaderScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Submit button
                 SizedBox(
                   width: double.infinity,

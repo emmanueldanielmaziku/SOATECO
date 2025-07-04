@@ -5,6 +5,8 @@ class UserModel {
   final String phone;
   final String role;
   final String? admissionNumber;
+  final String? ntaLevel;
+  final String? course;
   final DateTime createdAt;
 
   UserModel({
@@ -14,6 +16,8 @@ class UserModel {
     required this.phone,
     required this.role,
     this.admissionNumber,
+    this.ntaLevel,
+    this.course,
     required this.createdAt,
   });
 
@@ -25,6 +29,8 @@ class UserModel {
       phone: map['phone'] ?? '',
       role: map['role'] ?? 'student',
       admissionNumber: map['admissionNumber'],
+      ntaLevel: map['ntaLevel'],
+      course: map['course'],
       createdAt: map['createdAt']?.toDate() ?? DateTime.now(),
     );
   }
@@ -36,6 +42,8 @@ class UserModel {
       'phone': phone,
       'role': role,
       'admissionNumber': admissionNumber,
+      'ntaLevel': ntaLevel,
+      'course': course,
       'createdAt': createdAt,
     };
   }

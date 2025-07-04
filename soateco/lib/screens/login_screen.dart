@@ -7,6 +7,7 @@ import '../services/auth_service.dart';
 import 'leader_dashboard.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_container.dart';
+import 'student_registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,11 +16,12 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _admissionNumberController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+
   String? _errorMessage;
   bool _obscurePassword = true;
   late AnimationController _animationController;
@@ -32,14 +34,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
-    
+
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeIn,
       ),
     );
-    
+
     _animationController.forward();
   }
 
@@ -51,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
-Future<void> _login() async {
+  Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -70,12 +72,14 @@ Future<void> _login() async {
     }
 
     if (role == 'leader') {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const LeaderDashboard()),
+        (route) => false,
       );
     } else if (role == 'student') {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const StudentDashboard()),
+        (route) => false,
       );
     } else {
       setState(() {
@@ -89,7 +93,7 @@ Future<void> _login() async {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final size = MediaQuery.of(context).size;
-    
+
     return Scaffold(
       body: SafeArea(
         child: FadeTransition(
@@ -112,7 +116,6 @@ Future<void> _login() async {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                
                             color: Colors.white,
                             blurRadius: 20,
                             spreadRadius: 5,
@@ -131,21 +134,21 @@ Future<void> _login() async {
                   Text(
                     'Welcome to SOATECO',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textPrimaryColor,
-                    ),
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textPrimaryColor,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Arusha Technical College',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppTheme.textSecondaryColor,
-                    ),
+                          color: AppTheme.textSecondaryColor,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
-                  
+
                   // Login form
                   CustomContainer.card(
                     padding: const EdgeInsets.all(24),
@@ -154,12 +157,13 @@ Future<void> _login() async {
                       children: [
                         Text(
                           'Login',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         // Error message
                         if (_errorMessage != null)
                           Container(
@@ -171,7 +175,8 @@ Future<void> _login() async {
                             ),
                             child: Row(
                               children: [
-                                Icon(Icons.error_outline, color: Colors.red[700], size: 20),
+                                Icon(Icons.error_outline,
+                                    color: Colors.red[700], size: 20),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
@@ -183,7 +188,7 @@ Future<void> _login() async {
                             ),
                           ),
                         if (_errorMessage != null) const SizedBox(height: 16),
-                        
+
                         Form(
                           key: _formKey,
                           child: Column(
@@ -192,9 +197,12 @@ Future<void> _login() async {
                               // Admission Number field
                               Text(
                                 'Admission Number',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                    ),
                               ),
                               const SizedBox(height: 8),
                               TextFormField(
@@ -202,6 +210,22 @@ Future<void> _login() async {
                                 decoration: const InputDecoration(
                                   hintText: 'Enter your admission number',
                                   prefixIcon: Icon(Icons.badge_outlined),
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFE0E0E0)),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF43A047), width: 2),
+                                  ),
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -211,13 +235,16 @@ Future<void> _login() async {
                                 },
                               ),
                               const SizedBox(height: 20),
-                              
+
                               // Password field
                               Text(
                                 'Password',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                    ),
                               ),
                               const SizedBox(height: 8),
                               TextFormField(
@@ -228,7 +255,9 @@ Future<void> _login() async {
                                   prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
                                     icon: Icon(
-                                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                      _obscurePassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
                                       color: AppTheme.textSecondaryColor,
                                     ),
                                     onPressed: () {
@@ -236,6 +265,22 @@ Future<void> _login() async {
                                         _obscurePassword = !_obscurePassword;
                                       });
                                     },
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFE0E0E0)),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF43A047), width: 2),
                                   ),
                                 ),
                                 validator: (value) {
@@ -246,23 +291,24 @@ Future<void> _login() async {
                                 },
                               ),
                               const SizedBox(height: 24),
-                              
+
                               // Login button
                               SizedBox(
                                 width: double.infinity,
                                 height: 50,
                                 child: ElevatedButton(
-                                  onPressed: authService.isLoading ? null : _login,
+                                  onPressed:
+                                      authService.isLoading ? null : _login,
                                   child: authService.isLoading
-                                    ? const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : const Text('Login'),
+                                      ? const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Text('Login'),
                                 ),
                               ),
                             ],
@@ -271,9 +317,35 @@ Future<void> _login() async {
                       ],
                     ),
                   ),
-                  
+
                   const Spacer(),
-                  
+
+                  // Registration link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don\'t have an account? ',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppTheme.textSecondaryColor,
+                            ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const StudentRegistrationScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text('Register'),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
                   // Footer
                   Text(
                     '© ${DateTime.now().year} Arusha Technical College',

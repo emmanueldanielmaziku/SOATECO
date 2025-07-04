@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../theme/app_theme.dart';
-import '../widgets/custom_container.dart';
 
 class NewsDetailScreen extends StatelessWidget {
   final String newsId;

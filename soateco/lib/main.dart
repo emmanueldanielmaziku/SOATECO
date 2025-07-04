@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
         title: 'SOATECO App',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
+        
         home: const SplashScreen(),
       ),
     );

@@ -127,15 +127,18 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                   'Create News Post',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                      ),
-                ),
+                       ),
+                    ),
+
                 const SizedBox(height: 8),
+
                 Text(
                   'Share important information with the college community',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.textSecondaryColor,
                       ),
                 ),
+
                 const SizedBox(height: 24),
 
                 CustomContainer.card(
@@ -193,76 +196,76 @@ class _PostNewsScreenState extends State<PostNewsScreen> {
                 const SizedBox(height: 24),
 
                 // Image picker
-                CustomContainer.card(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Add Image (Optional)',
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                      ),
-                      const SizedBox(height: 16),
-                      GestureDetector(
-                        onTap: _pickImage,
-                        child: Container(
-                          height: 200,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: _selectedImage == null
-                                ? Colors.grey[100]
-                                : null,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey[300]!),
-                          ),
-                          child: _selectedImage != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    _selectedImage!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add_photo_alternate_outlined,
-                                      size: 48,
-                                      color: Colors.grey[600],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'Tap to add an image',
-                                      style: TextStyle(color: Colors.grey[600]),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                      ),
-                      if (_selectedImage != null) ...[
-                        const SizedBox(height: 16),
-                        Center(
-                          child: TextButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _selectedImage = null;
-                              });
-                            },
-                            icon: const Icon(Icons.delete_outline,
-                                color: AppTheme.errorColor),
-                            label: const Text(
-                              'Remove Image',
-                              style: TextStyle(color: AppTheme.errorColor),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                // CustomContainer.card(
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         'Add Image (Optional)',
+                //         style:
+                //             Theme.of(context).textTheme.titleMedium?.copyWith(
+                //                   fontWeight: FontWeight.w600,
+                //                 ),
+                //       ),
+                //       const SizedBox(height: 16),
+                //       GestureDetector(
+                //         onTap: _pickImage,
+                //         child: Container(
+                //           height: 200,
+                //           width: double.infinity,
+                //           decoration: BoxDecoration(
+                //             color: _selectedImage == null
+                //                 ? Colors.grey[100]
+                //                 : null,
+                //             borderRadius: BorderRadius.circular(12),
+                //             border: Border.all(color: Colors.grey[300]!),
+                //           ),
+                //           child: _selectedImage != null
+                //               ? ClipRRect(
+                //                   borderRadius: BorderRadius.circular(12),
+                //                   child: Image.file(
+                //                     _selectedImage!,
+                //                     fit: BoxFit.cover,
+                //                   ),
+                //                 )
+                //               : Column(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: [
+                //                     Icon(
+                //                       Icons.add_photo_alternate_outlined,
+                //                       size: 48,
+                //                       color: Colors.grey[600],
+                //                     ),
+                //                     const SizedBox(height: 8),
+                //                     Text(
+                //                       'Tap to add an image',
+                //                       style: TextStyle(color: Colors.grey[600]),
+                //                     ),
+                //                   ],
+                //                 ),
+                //         ),
+                //       ),
+                //       if (_selectedImage != null) ...[
+                //         const SizedBox(height: 16),
+                //         Center(
+                //           child: TextButton.icon(
+                //             onPressed: () {
+                //               setState(() {
+                //                 _selectedImage = null;
+                //               });
+                //             },
+                //             icon: const Icon(Icons.delete_outline,
+                //                 color: AppTheme.errorColor),
+                //             label: const Text(
+                //               'Remove Image',
+                //               style: TextStyle(color: AppTheme.errorColor),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ],
+                //   ),
+                // ),
 
                 const SizedBox(height: 32),
 

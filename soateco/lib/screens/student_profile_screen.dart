@@ -20,7 +20,6 @@ class StudentProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(context),
             Expanded(
               child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                 future: authService.getUserDocument(),
@@ -153,9 +152,16 @@ class StudentProfileScreen extends StatelessWidget {
                               const Divider(),
                               _buildInfoItem(
                                 context,
-                                'Department',
-                                userData['department'] ?? 'Not specified',
+                                'NTA Level',
+                                userData['ntaLevel'] ?? 'Not specified',
                                 Icons.school_outlined,
+                              ),
+                              const Divider(),
+                              _buildInfoItem(
+                                context,
+                                'Course',
+                                userData['course'] ?? 'Not specified',
+                                Icons.book_outlined,
                               ),
                             ],
                           ),
@@ -260,38 +266,6 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              'My Profile',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildInfoItem(
       BuildContext context, String label, String value, IconData icon) {

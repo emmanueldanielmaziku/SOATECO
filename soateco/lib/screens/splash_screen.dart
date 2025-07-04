@@ -59,26 +59,43 @@ class _SplashScreenState extends State<SplashScreen>
   void navigateToNextScreen() async {
     final authService = Provider.of<AuthService>(context, listen: false);
 
+    // Wait for auth service to initialize
+    while (!authService.isInitialized) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+
     if (authService.isAuthenticated) {
       await authService.loadUserRole();
 
       if (authService.isLeader) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LeaderDashboard()),
-        );
+        if (mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const LeaderDashboard()),
+            (route) => false, // Remove all previous routes
+          );
+        }
       } else if (authService.userRole == 'student') {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const StudentDashboard()),
-        );
+        if (mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const StudentDashboard()),
+            (route) => false, // Remove all previous routes
+          );
+        }
       } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
+        if (mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (route) => false, // Remove all previous routes
+          );
+        }
       }
     } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false, // Remove all previous routes
+        );
+      }
     }
   }
 
@@ -121,11 +138,12 @@ class _SplashScreenState extends State<SplashScreen>
                               spreadRadius: 5,
                             ),
                           ],
-                
                         ),
-                        
                         child: Center(
-                          child: Image.asset('lib/assets/icons/logo.png',fit: BoxFit.cover,),
+                          child: Image.asset(
+                            'lib/assets/icons/logo.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 32),
