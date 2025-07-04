@@ -15,7 +15,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _optionsController = TextEditingController();
-  
+
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now().add(const Duration(days: 7));
   bool _isLoading = false;
@@ -68,17 +68,17 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
 
     try {
       final authService = Provider.of<AuthService>(context, listen: false);
-      
+
       // Parse options from comma-separated string
       final options = _optionsController.text
           .split(',')
           .map((option) => option.trim())
           .where((option) => option.isNotEmpty)
           .toList();
-      
+
       // Create a map of options with zero votes
       final optionsMap = {for (var option in options) option: 0};
-      
+
       // Save poll to Firestore
       await FirebaseFirestore.instance.collection('polls').add({
         'title': _titleController.text.trim(),
@@ -99,7 +99,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        
+
         // Clear form and hide it
         _titleController.clear();
         _optionsController.clear();
@@ -153,22 +153,20 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                 Text(
                   'Create New Poll',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 16),
                 _buildPollForm(),
                 const SizedBox(height: 24),
               ],
-              
               Text(
                 'Active Polls',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 8),
-              
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -180,15 +178,15 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    
+
                     if (snapshot.hasError) {
                       return Center(
                         child: Text('Error: ${snapshot.error}'),
                       );
                     }
-                    
+
                     final polls = snapshot.data?.docs ?? [];
-                    
+
                     if (polls.isEmpty) {
                       return Center(
                         child: Column(
@@ -211,16 +209,18 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                         ),
                       );
                     }
-                    
+
                     return ListView.builder(
                       itemCount: polls.length,
                       itemBuilder: (context, index) {
-                        final poll = polls[index].data() as Map<String, dynamic>;
+                        final poll =
+                            polls[index].data() as Map<String, dynamic>;
                         final pollId = polls[index].id;
                         final options = poll['options'] as Map<String, dynamic>;
-                        final startDate = (poll['startDate'] as Timestamp).toDate();
+                        final startDate =
+                            (poll['startDate'] as Timestamp).toDate();
                         final endDate = (poll['endDate'] as Timestamp).toDate();
-                        
+
                         return Card(
                           margin: const EdgeInsets.only(bottom: 16),
                           child: Padding(
@@ -230,9 +230,12 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                               children: [
                                 Text(
                                   poll['title'],
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
@@ -253,18 +256,22 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 16),
-                                
+
                                 // Poll options
                                 ...options.entries.map((entry) {
                                   final option = entry.key;
                                   final votes = entry.value;
-                                  final totalVotes = options.values.fold<int>(0, (sum, votes) => sum + (votes as int));
-                                  final percentage = totalVotes > 0 ? (votes / totalVotes) * 100 : 0.0;
-                                  
+                                  final totalVotes = options.values.fold<int>(
+                                      0, (sum, votes) => sum + (votes as int));
+                                  final percentage = totalVotes > 0
+                                      ? (votes / totalVotes) * 100
+                                      : 0.0;
+
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 8.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(option),
                                         const SizedBox(height: 4),
@@ -272,11 +279,15 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                           children: [
                                             Expanded(
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(4),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
                                                 child: LinearProgressIndicator(
                                                   value: percentage / 100,
-                                                  backgroundColor: Colors.grey[200],
-                                                  color: Theme.of(context).colorScheme.primary,
+                                                  backgroundColor:
+                                                      Colors.grey[200],
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
                                                   minHeight: 8,
                                                 ),
                                               ),
@@ -295,7 +306,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                     ),
                                   );
                                 }),
-                                
+
                                 const SizedBox(height: 8),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -303,9 +314,11 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                     TextButton(
                                       onPressed: () {
                                         // In a real app, this would navigate to a detailed poll view
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
-                                            content: Text('Poll details would open here'),
+                                            content: Text(
+                                                'Poll details would open here'),
                                           ),
                                         );
                                       },
@@ -320,17 +333,21 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                               .collection('polls')
                                               .doc(pollId)
                                               .update({'active': false});
-                                              
-                                          ScaffoldMessenger.of(context).showSnackBar(
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
                                             const SnackBar(
-                                              content: Text('Poll closed successfully'),
+                                              content: Text(
+                                                  'Poll closed successfully'),
                                               backgroundColor: Colors.green,
                                             ),
                                           );
                                         } catch (e) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
                                             SnackBar(
-                                              content: Text('Error closing poll: $e'),
+                                              content: Text(
+                                                  'Error closing poll: $e'),
                                               backgroundColor: Colors.red,
                                             ),
                                           );
@@ -377,7 +394,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Options field
           TextFormField(
             controller: _optionsController,
@@ -389,7 +406,10 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
               if (value == null || value.isEmpty) {
                 return 'Please enter at least one option';
               }
-              final options = value.split(',').where((option) => option.trim().isNotEmpty).toList();
+              final options = value
+                  .split(',')
+                  .where((option) => option.trim().isNotEmpty)
+                  .toList();
               if (options.length < 2) {
                 return 'Please enter at least two options';
               }
@@ -397,7 +417,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Date selection
           Row(
             children: [
@@ -410,7 +430,8 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                     InkWell(
                       onTap: () => _selectStartDate(context),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(8),
@@ -444,7 +465,8 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                     InkWell(
                       onTap: () => _selectEndDate(context),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(8),
@@ -471,7 +493,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
             ],
           ),
           const SizedBox(height: 24),
-          
+
           // Submit button
           SizedBox(
             width: double.infinity,

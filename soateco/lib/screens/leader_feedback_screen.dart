@@ -35,18 +35,24 @@ class LeaderFeedbackScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     height: 50,
                     decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[300]!),
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: TabBar(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 6),
+                      indicatorSize: TabBarIndicatorSize.tab,
                       indicator: BoxDecoration(
                         color: AppTheme.primaryColor,
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       labelColor: Colors.white,
                       unselectedLabelColor: AppTheme.textSecondaryColor,
                       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+                      dividerHeight: 0,
+                      unselectedLabelStyle:
+                          const TextStyle(fontWeight: FontWeight.normal),
                       tabs: const [
                         Tab(text: 'Pending'),
                         Tab(text: 'Reviewed'),

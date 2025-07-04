@@ -1,8 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../theme/app_theme.dart';
-import 'package:pay/pay.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
 
 class CampaignDetailsScreen extends StatelessWidget {
   final String campaignId;
@@ -547,232 +549,296 @@ class CampaignDetailsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final amount = double.tryParse(controller.text) ?? 0.0;
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.volunteer_activism,
-                        color: AppTheme.primaryColor,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Make a Contribution',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppTheme.textPrimaryColor,
-                                ),
-                          ),
-                          Text(
-                            'Support this campaign',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: AppTheme.textSecondaryColor,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Contribution Amount',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textPrimaryColor,
-                      ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: controller,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    hintText: 'Enter amount in TSh',
-                    prefixText: 'TSh ',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide:
-                          const BorderSide(color: AppTheme.primaryColor),
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[50],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
+                    Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                        ),
-                        child: const Text(
-                          'Cancel',
-                          style: TextStyle(
-                            color: AppTheme.textSecondaryColor,
-                            fontWeight: FontWeight.w600,
+                          child: const Icon(
+                            Icons.volunteer_activism,
+                            color: AppTheme.primaryColor,
+                            size: 24,
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: SizedBox(
-                        height: 50,
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: GooglePayButton(
-                            paymentConfigurationAsset:
-                                'assets/gpay_config.json',
-                            paymentItems: [
-                              PaymentItem(
-                                label: 'Total',
-                                amount: controller.text.isEmpty
-                                    ? '0'
-                                    : controller.text,
-                                status: PaymentItemStatus.final_price,
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Make a Contribution',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.textPrimaryColor,
+                                    ),
+                              ),
+                              Text(
+                                'Support this campaign',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: AppTheme.textSecondaryColor,
+                                    ),
                               ),
                             ],
-                            type: GooglePayButtonType.donate,
-                            onPaymentResult:
-                                (Map<String, dynamic> result) async {
-                              final amount =
-                                  double.tryParse(controller.text) ?? 0;
-                              if (amount <= 0) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Please enter a valid amount'),
-                                    backgroundColor: AppTheme.errorColor,
-                                  ),
-                                );
-                                return;
-                              }
-                              Navigator.of(context).pop();
-                              final user = FirebaseAuth.instance.currentUser;
-                              final now = DateTime.now();
-                              String userName = 'Anonymous';
-                              String? admissionNumber;
-                              if (user != null) {
-                                try {
-                                  final userDoc = await FirebaseFirestore
-                                      .instance
-                                      .collection('users')
-                                      .doc(user.uid)
-                                      .get();
-                                  if (userDoc.exists) {
-                                    final userData = userDoc.data()!;
-                                    userName = userData['name'] ??
-                                        user.email ??
-                                        'Anonymous';
-                                    admissionNumber =
-                                        userData['admissionNumber'];
-                                  }
-                                } catch (e) {
-                                  userName = user.email ?? 'Anonymous';
-                                }
-                              }
-                              await FirebaseFirestore.instance
-                                  .collection('contributions')
-                                  .add({
-                                'campaignId': campaignId,
-                                'userId': user?.uid,
-                                'userName': userName,
-                                'admissionNumber': admissionNumber,
-                                'amount': amount,
-                                'paidAt': now,
-                              });
-                              await FirebaseFirestore.instance
-                                  .collection('contribution_campaigns')
-                                  .doc(campaignId)
-                                  .update({
-                                'currentAmount': FieldValue.increment(amount),
-                              });
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.check_circle,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                            'Thank you for your contribution!'),
-                                      ],
-                                    ),
-                                    backgroundColor: Colors.green,
-                                    behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            loadingIndicator: const Center(
-                                child: CircularProgressIndicator()),
-                            onError: (error) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Google Pay failed: $error'),
-                                  backgroundColor: AppTheme.errorColor,
-                                ),
-                              );
-
-                              print(error);
-                            },
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Contribution Amount',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.textPrimaryColor,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: controller,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        hintText: 'Enter amount in TSh',
+                        prefixText: 'TSh ',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: AppTheme.primaryColor),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[50],
+                        errorText: controller.text.isNotEmpty &&
+                                (double.tryParse(controller.text) == null ||
+                                    double.parse(controller.text) <= 0)
+                            ? 'Enter a valid amount'
+                            : null,
                       ),
+                      onChanged: (value) {
+                        setState(() {}); // Update UI for error validation
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: AppTheme.textSecondaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: SizedBox(
+                            height: 50,
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: amount <= 0 ? Colors.grey : Colors.blue,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: TextButton(
+                                onPressed: amount <= 0
+                                    ? null
+                                    : () {
+                                        if (Navigator.of(context)
+                                                    .canPop()) {
+                                                  Navigator.of(context).pop();
+                                                }
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => UsePaypal(
+                                              sandboxMode: true,
+                                              clientId:
+                                                  "ASRwdiXhIVcOieylcN4vV1hUS3bxWTDI758zxplxFMWo9q4K4PhnH2rp_Fn1vr-38lhuAYkgI8_-gX7r",
+                                              secretKey:
+                                                  "EHOd118Rg_NgW8oMD1SHPhvoEfS9wImF0bN2DbHqC8vu2KjBIqGTZNgizKsnCMk7exZ1cvehbYhK1mHu",
+                                              returnURL:
+                                                  "https://samplesite.com/return",
+                                              cancelURL:
+                                                  "https://samplesite.com/cancel",
+                                              transactions: [
+                                                {
+                                                  "amount": {
+                                                    "total": amount
+                                                        .toStringAsFixed(2),
+                                                    "currency": "USD",
+                                                    "details": {
+                                                      "subtotal": amount
+                                                          .toStringAsFixed(2),
+                                                      "shipping": '0',
+                                                      "shipping_discount": 0
+                                                    }
+                                                  },
+                                                  "description":
+                                                      "Contribution to campaign",
+                                                }
+                                              ],
+                                              note:
+                                                  "Contact us for any questions on your order.",
+                                              onSuccess: (Map params) async {
+                                                // Save contribution to Firestore
+                                                final user = FirebaseAuth
+                                                    .instance.currentUser;
+                                                final now = DateTime.now();
+                                                String userName = 'Anonymous';
+                                                String? admissionNumber;
+                                                if (user != null) {
+                                                  try {
+                                                    final userDoc =
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('users')
+                                                            .doc(user.uid)
+                                                            .get();
+                                                    if (userDoc.exists) {
+                                                      final userData =
+                                                          userDoc.data()!;
+                                                      userName =
+                                                          userData['name'] ??
+                                                              user.email ??
+                                                              'Anonymous';
+                                                      admissionNumber = userData[
+                                                          'admissionNumber'];
+                                                    }
+                                                  } catch (e) {
+                                                    userName = user.email ??
+                                                        'Anonymous';
+                                                  }
+                                                }
+                                                await FirebaseFirestore.instance
+                                                    .collection('contributions')
+                                                    .add({
+                                                  'campaignId': campaignId,
+                                                  'userId': user?.uid,
+                                                  'userName': userName,
+                                                  'admissionNumber':
+                                                      admissionNumber,
+                                                  'amount': amount,
+                                                  'paidAt': now,
+                                                });
+                                                await FirebaseFirestore.instance
+                                                    .collection(
+                                                        'contribution_campaigns')
+                                                    .doc(campaignId)
+                                                    .update({
+                                                  'currentAmount':
+                                                      FieldValue.increment(
+                                                          amount),
+                                                });
+                                                if (context.mounted) {
+                                                  Navigator.of(context).pop();
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: const Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.check_circle,
+                                                            color: Colors.white,
+                                                            size: 20,
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                          Text(
+                                                              'Thank you for your contribution!'),
+                                                        ],
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      behavior: SnackBarBehavior
+                                                          .floating,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              onError: (error) {
+                                                Navigator.of(context).pop();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                        'Payment failed: $error'),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              },
+                                              onCancel: () {
+                                                Navigator.of(context).pop();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        'Payment cancelled'),
+                                                    backgroundColor:
+                                                        Colors.orange,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                child: const Text(
+                                  'Pay with PayPal',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

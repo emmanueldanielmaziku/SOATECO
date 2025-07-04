@@ -12,6 +12,7 @@ import 'student_news_screen.dart';
 import 'student_announcements_screen.dart';
 import 'campaign_details_screen.dart';
 import 'login_screen.dart';
+import 'student_polls_screen.dart';
 
 class StudentDashboard extends StatefulWidget {
   const StudentDashboard({super.key});
@@ -23,8 +24,6 @@ class StudentDashboard extends StatefulWidget {
 class _StudentDashboardState extends State<StudentDashboard> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
-
-  
 
   @override
   void dispose() {
@@ -85,6 +84,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     const StudentAnnouncementsScreen(),
                     _buildContributionsTab(authService),
                     const StudentProfileScreen(),
+                    const StudentPollsScreen(),
                   ],
                 ),
               ),
@@ -221,6 +221,13 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   label: 'Profile',
                   index: 4,
                 ),
+                _buildModernDrawerItem(
+                  context,
+                  icon: Icons.how_to_vote_outlined,
+                  activeIcon: Icons.how_to_vote,
+                  label: 'Voting',
+                  index: 5,
+                ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Divider(),
@@ -311,6 +318,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
         return 'Contributions';
       case 4:
         return 'Profile';
+      case 5:
+        return 'Voting';
       default:
         return 'SOATECO';
     }
