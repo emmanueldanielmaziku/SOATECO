@@ -82,9 +82,8 @@ class StudentProfileScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                userData['email'] ??
-                                    authService.user?.email ??
-                                    'No email',
+                                userData['admissionNumber'] ??
+                                    'No admission number',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -265,7 +264,6 @@ class StudentProfileScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildInfoItem(
       BuildContext context, String label, String value, IconData icon) {
