@@ -744,6 +744,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 Expanded(
                   child: _buildContactButton(
                     icon: Icons.call,
+                    action: "Call",
                     color: AppTheme.primaryColor,
                     onPressed: () => _makePhoneCall(leader['phone'] ?? ''),
                   ),
@@ -752,6 +753,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 Expanded(
                   child: _buildContactButton(
                     icon: Icons.chat_bubble_outline,
+                    action: "Chat",
                     color: Colors.green[600]!,
                     onPressed: () => _openWhatsApp(
                         leader['phone'] ?? '', leader['name'] ?? ''),
@@ -768,6 +770,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
   Widget _buildContactButton({
     required IconData icon,
     required Color color,
+    required String action,
     required VoidCallback onPressed,
   }) {
     return Container(
@@ -781,12 +784,19 @@ class _StudentDashboardState extends State<StudentDashboard> {
           onTap: onPressed,
           borderRadius: BorderRadius.circular(8),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Icon(
-              icon,
-              color: color,
-              size: 18,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                    icon,
+                    color: color,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 6.0,),
+                  Text(action,style: const TextStyle(color: Colors.green),)
+              ],
+            )
           ),
         ),
       ),
@@ -876,7 +886,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
     );
   }
 
-  // Keep all the existing helper methods for counts and actions
+
   Widget _buildNewsCount() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('news').snapshots(),

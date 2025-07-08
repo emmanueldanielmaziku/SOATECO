@@ -313,7 +313,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                   children: [
                                     TextButton(
                                       onPressed: () {
-                                        // In a real app, this would navigate to a detailed poll view
+                                      
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
@@ -327,7 +327,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                                     const SizedBox(width: 8),
                                     TextButton(
                                       onPressed: () async {
-                                        // Toggle poll active status
+                                   
                                         try {
                                           await FirebaseFirestore.instance
                                               .collection('polls')
@@ -430,8 +430,7 @@ class _VotingPollsScreenState extends State<VotingPollsScreen> {
                     InkWell(
                       onTap: () => _selectStartDate(context),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(8),

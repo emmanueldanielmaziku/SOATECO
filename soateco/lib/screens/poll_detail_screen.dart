@@ -140,7 +140,7 @@ class _PollDetailScreenState extends State<PollDetailScreen> {
                   children: [
                     CustomContainer.gradient(
                       gradient: LinearGradient(
-                        colors: [Colors.purple[700]!, Colors.purple[900]!],
+                        colors: [Colors.purple[200]!, Colors.purple[300]!],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),

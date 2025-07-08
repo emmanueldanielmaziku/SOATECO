@@ -82,7 +82,7 @@ Future<void> _openWhatsApp(
 
     String formattedPhone = cleanPhone;
     if (!cleanPhone.startsWith('255')) {
-      formattedPhone = '255$cleanPhone';
+      formattedPhone = '255${cleanPhone.replaceFirst(RegExp(r'^0'), '')}';
     }
 
     final message =
@@ -95,12 +95,14 @@ Future<void> _openWhatsApp(
     if (await canLaunchUrl(whatsappUri)) {
       await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not launch WhatsApp'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not launch WhatsApp'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

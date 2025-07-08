@@ -21,11 +21,10 @@ class StudentPollsScreen extends StatelessWidget {
             child: Text(
               'Voting Polls',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
-          
           Expanded(
             child: DefaultTabController(
               length: 2,
@@ -33,30 +32,31 @@ class StudentPollsScreen extends StatelessWidget {
                 children: [
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 18),
-                    padding: const EdgeInsets.symmetric(vertical: 4),
                     height: 55,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: Colors.grey[500]!,
+                        color: Colors.grey[400]!,
                         width: 1,
                       ),
                     ),
                     child: TabBar(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
                       indicator: BoxDecoration(
-                        color: Colors.purple[700],
-                        borderRadius: BorderRadius.circular(10),
+                        color: AppTheme.primaryColor,
+                        borderRadius: BorderRadius.circular(7),
                       ),
+                      padding: const EdgeInsets.all(5.0),
                       dividerColor: Colors.transparent,
                       labelColor: Colors.white,
                       unselectedLabelColor: AppTheme.textSecondaryColor,
+                       indicatorSize: TabBarIndicatorSize.tab,
                       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+                      unselectedLabelStyle:
+                          const TextStyle(fontWeight: FontWeight.normal),
                       tabs: const [
                         Tab(
-                          child: Row(
+                          child: Expanded(child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.check_circle_outline, size: 18),
@@ -64,6 +64,7 @@ class StudentPollsScreen extends StatelessWidget {
                               Text('Active Polls'),
                             ],
                           ),
+                        )
                         ),
                         Tab(
                           child: Row(
@@ -98,7 +99,7 @@ class StudentPollsScreen extends StatelessWidget {
 
   Widget _buildPollsList(BuildContext context, bool active) {
     final authService = Provider.of<AuthService>(context);
-    
+
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('polls')
@@ -109,15 +110,15 @@ class StudentPollsScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         if (snapshot.hasError) {
           return Center(
             child: Text('Error: ${snapshot.error}'),
           );
         }
-        
+
         final polls = snapshot.data?.docs ?? [];
-        
+
         if (polls.isEmpty) {
           return Center(
             child: Column(
@@ -130,7 +131,9 @@ class StudentPollsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  active ? 'No active polls available' : 'No past polls available',
+                  active
+                      ? 'No active polls available'
+                      : 'No past polls available',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 16,
@@ -140,7 +143,7 @@ class StudentPollsScreen extends StatelessWidget {
             ),
           );
         }
-        
+
         return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: polls.length,
@@ -150,17 +153,17 @@ class StudentPollsScreen extends StatelessWidget {
             final startDate = (poll['startDate'] as Timestamp).toDate();
             final endDate = (poll['endDate'] as Timestamp).toDate();
             final options = poll['options'] as Map<String, dynamic>;
-            
+
             // Calculate total votes
             int totalVotes = 0;
             options.forEach((option, votes) {
               totalVotes += (votes as int);
             });
-            
+
             // Check if user has voted
             final userVotes = poll['userVotes'] as Map<String, dynamic>? ?? {};
             final hasVoted = userVotes.containsKey(authService.user?.uid);
-            
+
             return CustomContainer.card(
               onTap: () {
                 Navigator.push(
@@ -174,7 +177,8 @@ class StudentPollsScreen extends StatelessWidget {
                       endDate: endDate,
                       active: active,
                       hasVoted: hasVoted,
-                      userVote: hasVoted ? userVotes[authService.user?.uid] : null,
+                      userVote:
+                          hasVoted ? userVotes[authService.user?.uid] : null,
                     ),
                   ),
                 );
@@ -203,16 +207,22 @@ class StudentPollsScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Poll',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Colors.purple[700],
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: Colors.purple[700],
+                                    fontWeight: FontWeight.w500,
+                                  ),
                             ),
                             Text(
                               poll['title'] ?? 'No Title',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -220,7 +230,8 @@ class StudentPollsScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: active ? Colors.green[100] : Colors.grey[200],
                           borderRadius: BorderRadius.circular(12),
@@ -228,7 +239,8 @@ class StudentPollsScreen extends StatelessWidget {
                         child: Text(
                           active ? 'Active' : 'Closed',
                           style: TextStyle(
-                            color: active ? Colors.green[700] : Colors.grey[700],
+                            color:
+                                active ? Colors.green[700] : Colors.grey[700],
                             fontWeight: FontWeight.w500,
                             fontSize: 12,
                           ),
@@ -240,19 +252,20 @@ class StudentPollsScreen extends StatelessWidget {
                   Text(
                     '${DateFormat('MMM d').format(startDate)} - ${DateFormat('MMM d, yyyy').format(endDate)}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.textSecondaryColor,
-                    ),
+                          color: AppTheme.textSecondaryColor,
+                        ),
                   ),
                   const SizedBox(height: 16),
                   const Divider(),
                   const SizedBox(height: 8),
-                  
+
                   // Show top 2 options
                   ...options.entries.take(2).map((entry) {
                     final option = entry.key;
                     final votes = entry.value;
-                    final percentage = totalVotes > 0 ? (votes / totalVotes) * 100 : 0.0;
-                    
+                    final percentage =
+                        totalVotes > 0 ? (votes / totalVotes) * 100 : 0.0;
+
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Column(
@@ -271,10 +284,13 @@ class StudentPollsScreen extends StatelessWidget {
                               ),
                               Text(
                                 '${percentage.toStringAsFixed(1)}%',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppTheme.textSecondaryColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: AppTheme.textSecondaryColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                               ),
                             ],
                           ),
@@ -292,15 +308,15 @@ class StudentPollsScreen extends StatelessWidget {
                       ),
                     );
                   }),
-                  
+
                   if (options.length > 2)
                     Text(
                       '+ ${options.length - 2} more options',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.textSecondaryColor,
-                      ),
+                            color: AppTheme.textSecondaryColor,
+                          ),
                     ),
-                  
+
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -308,15 +324,19 @@ class StudentPollsScreen extends StatelessWidget {
                       Text(
                         '$totalVotes votes',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.textSecondaryColor,
-                        ),
+                              color: AppTheme.textSecondaryColor,
+                            ),
                       ),
                       Text(
-                        hasVoted ? 'You voted' : (active ? 'Vote now' : 'View results'),
+                        hasVoted
+                            ? 'You voted'
+                            : (active ? 'Vote now' : 'View results'),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: active ? Colors.purple[700] : AppTheme.textSecondaryColor,
-                          fontWeight: FontWeight.w500,
-                        ),
+                              color: active
+                                  ? Colors.purple[700]
+                                  : AppTheme.textSecondaryColor,
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                     ],
                   ),
